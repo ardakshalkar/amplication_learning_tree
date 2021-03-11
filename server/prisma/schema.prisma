@@ -1,0 +1,56 @@
+datasource postgres {
+  provider = "postgresql"
+  url      = env("POSTGRESQL_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  completions Completion[]
+  createdAt   DateTime     @default(now())
+  firstName   String?
+  id          String       @id @default(cuid())
+  lastName    String?
+  password    String
+  roles       String[]
+  tracks      Track[]
+  updatedAt   DateTime     @updatedAt
+  username    String       @unique
+}
+
+model Item {
+  completions   Completion[]
+  createdAt     DateTime     @default(now())
+  description   String?
+  id            String       @id @default(cuid())
+  items         Item[]       @relation(name: "items")
+  prerequisites Item[]       @relation(name: "items")
+  title         String
+  tracks        Track[]
+  updatedAt     DateTime     @updatedAt
+}
+
+model Completion {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  itemId    Item?    @relation(fields: [itemIdId])
+  itemIdId  String?
+  updatedAt DateTime @updatedAt
+  userId    User?    @relation(fields: [userIdId])
+  userIdId  String?
+}
+
+model Track {
+  createdAt       DateTime @default(now())
+  description     String?
+  id              String   @id @default(cuid())
+  item            Item?    @relation(fields: [itemId])
+  itemId          String?
+  learningOutcome String?
+  title           String?
+  updatedAt       DateTime @updatedAt
+  user            User?    @relation(fields: [userId])
+  userId          String?
+}

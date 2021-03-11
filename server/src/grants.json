@@ -1,0 +1,446 @@
+[
+  {
+    "role": "admin",
+    "resource": "User",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "User",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "User",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "User",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "User",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "User",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "User",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "User",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "User",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "User",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "User",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "User",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "User",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "User",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "User",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "User",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "User",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "User",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "User",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "User",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Item",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Item",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Item",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Item",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Item",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Item",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Item",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Item",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Item",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Item",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Item",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Item",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Item",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Item",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Completion",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Completion",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Completion",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Completion",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Completion",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Completion",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Completion",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Completion",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Completion",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Completion",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Completion",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Completion",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Completion",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Completion",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Completion",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Completion",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Completion",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Completion",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Completion",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Completion",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Track",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Track",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Track",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Track",
+    "action": "read:own",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Track",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Track",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Track",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Track",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Track",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Track",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Track",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Track",
+    "action": "update:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Track",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Track",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Track",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Track",
+    "action": "delete:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "Track",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "accessor",
+    "resource": "Track",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
+    "resource": "Track",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Track",
+    "action": "read:any",
+    "attributes": "*"
+  }
+]
