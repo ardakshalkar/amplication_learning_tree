@@ -1,6 +1,6 @@
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { ItemWhereUniqueInput } from "../../item/base/ItemWhereUniqueInput";
+import { CompetenceWhereUniqueInput } from "../../competence/base/CompetenceWhereUniqueInput";
 import { ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
@@ -8,18 +8,19 @@ import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 class CompletionCreateInput {
   @ApiProperty({
     required: false,
-    type: ItemWhereUniqueInput,
+    type: () => CompetenceWhereUniqueInput,
   })
   @ValidateNested()
-  @Type(() => ItemWhereUniqueInput)
+  @Type(() => CompetenceWhereUniqueInput)
   @IsOptional()
-  @Field(() => ItemWhereUniqueInput, {
+  @Field(() => CompetenceWhereUniqueInput, {
     nullable: true,
   })
-  itemId?: ItemWhereUniqueInput | null;
+  itemId?: CompetenceWhereUniqueInput | null;
+
   @ApiProperty({
     required: false,
-    type: UserWhereUniqueInput,
+    type: () => UserWhereUniqueInput,
   })
   @ValidateNested()
   @Type(() => UserWhereUniqueInput)

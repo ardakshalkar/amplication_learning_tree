@@ -1,38 +1,54 @@
 import { PrismaService } from "nestjs-prisma";
-import {
-  FindOneCompletionArgs,
-  FindManyCompletionArgs,
-  CompletionCreateArgs,
-  CompletionUpdateArgs,
-  CompletionDeleteArgs,
-  Subset,
-} from "@prisma/client";
+import { Prisma, Completion, Competence, User } from "@prisma/client";
 
 export class CompletionServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
-  findMany<T extends FindManyCompletionArgs>(
-    args: Subset<T, FindManyCompletionArgs>
-  ) {
+
+  async count<T extends Prisma.CompletionFindManyArgs>(
+    args: Prisma.SelectSubset<T, Prisma.CompletionFindManyArgs>
+  ): Promise<number> {
+    return this.prisma.completion.count(args);
+  }
+
+  async findMany<T extends Prisma.CompletionFindManyArgs>(
+    args: Prisma.SelectSubset<T, Prisma.CompletionFindManyArgs>
+  ): Promise<Completion[]> {
     return this.prisma.completion.findMany(args);
   }
-  findOne<T extends FindOneCompletionArgs>(
-    args: Subset<T, FindOneCompletionArgs>
-  ) {
-    return this.prisma.completion.findOne(args);
+  async findOne<T extends Prisma.CompletionFindUniqueArgs>(
+    args: Prisma.SelectSubset<T, Prisma.CompletionFindUniqueArgs>
+  ): Promise<Completion | null> {
+    return this.prisma.completion.findUnique(args);
   }
-  create<T extends CompletionCreateArgs>(
-    args: Subset<T, CompletionCreateArgs>
-  ) {
+  async create<T extends Prisma.CompletionCreateArgs>(
+    args: Prisma.SelectSubset<T, Prisma.CompletionCreateArgs>
+  ): Promise<Completion> {
     return this.prisma.completion.create<T>(args);
   }
-  update<T extends CompletionUpdateArgs>(
-    args: Subset<T, CompletionUpdateArgs>
-  ) {
+  async update<T extends Prisma.CompletionUpdateArgs>(
+    args: Prisma.SelectSubset<T, Prisma.CompletionUpdateArgs>
+  ): Promise<Completion> {
     return this.prisma.completion.update<T>(args);
   }
-  delete<T extends CompletionDeleteArgs>(
-    args: Subset<T, CompletionDeleteArgs>
-  ) {
+  async delete<T extends Prisma.CompletionDeleteArgs>(
+    args: Prisma.SelectSubset<T, Prisma.CompletionDeleteArgs>
+  ): Promise<Completion> {
     return this.prisma.completion.delete(args);
+  }
+
+  async getItemId(parentId: string): Promise<Competence | null> {
+    return this.prisma.completion
+      .findUnique({
+        where: { id: parentId },
+      })
+      .itemId();
+  }
+
+  async getUserId(parentId: string): Promise<User | null> {
+    return this.prisma.completion
+      .findUnique({
+        where: { id: parentId },
+      })
+      .userId();
   }
 }

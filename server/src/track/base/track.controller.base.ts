@@ -6,10 +6,13 @@ import * as basicAuthGuard from "../../auth/basicAuth.guard";
 import * as abacUtil from "../../auth/abac.util";
 import { isRecordNotFoundError } from "../../prisma.util";
 import * as errors from "../../errors";
+import { Request } from "express";
+import { plainToClass } from "class-transformer";
 import { TrackService } from "../track.service";
 import { TrackCreateInput } from "./TrackCreateInput";
 import { TrackWhereInput } from "./TrackWhereInput";
 import { TrackWhereUniqueInput } from "./TrackWhereUniqueInput";
+import { TrackFindManyArgs } from "./TrackFindManyArgs";
 import { TrackUpdateInput } from "./TrackUpdateInput";
 import { Track } from "./Track";
 
@@ -30,7 +33,6 @@ export class TrackControllerBase {
   @swagger.ApiCreatedResponse({ type: Track })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async create(
-    @common.Query() query: {},
     @common.Body() data: TrackCreateInput,
     @nestAccessControl.UserRoles() userRoles: string[]
   ): Promise<Track> {
@@ -52,9 +54,7 @@ export class TrackControllerBase {
         `providing the properties: ${properties} on ${"Track"} creation is forbidden for roles: ${roles}`
       );
     }
-    // @ts-ignore
     return await this.service.create({
-      ...query,
       data: {
         ...data,
 
@@ -104,10 +104,17 @@ export class TrackControllerBase {
   })
   @swagger.ApiOkResponse({ type: [Track] })
   @swagger.ApiForbiddenResponse()
+  @swagger.ApiQuery({
+    type: () => TrackFindManyArgs,
+    style: "deepObject",
+    explode: true,
+  })
   async findMany(
-    @common.Query() query: TrackWhereInput,
+    @common.Req() request: Request,
     @nestAccessControl.UserRoles() userRoles: string[]
   ): Promise<Track[]> {
+    const args = plainToClass(TrackFindManyArgs, request.query);
+
     const permission = this.rolesBuilder.permission({
       role: userRoles,
       action: "read",
@@ -115,7 +122,7 @@ export class TrackControllerBase {
       resource: "Track",
     });
     const results = await this.service.findMany({
-      where: query,
+      ...args,
       select: {
         createdAt: true,
         description: true,
@@ -153,7 +160,6 @@ export class TrackControllerBase {
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async findOne(
-    @common.Query() query: {},
     @common.Param() params: TrackWhereUniqueInput,
     @nestAccessControl.UserRoles() userRoles: string[]
   ): Promise<Track | null> {
@@ -164,7 +170,6 @@ export class TrackControllerBase {
       resource: "Track",
     });
     const result = await this.service.findOne({
-      ...query,
       where: params,
       select: {
         createdAt: true,
@@ -208,7 +213,6 @@ export class TrackControllerBase {
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async update(
-    @common.Query() query: {},
     @common.Param() params: TrackWhereUniqueInput,
     @common.Body()
     data: TrackUpdateInput,
@@ -233,9 +237,7 @@ export class TrackControllerBase {
       );
     }
     try {
-      // @ts-ignore
       return await this.service.update({
-        ...query,
         where: params,
         data: {
           ...data,
@@ -296,12 +298,10 @@ export class TrackControllerBase {
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async delete(
-    @common.Query() query: {},
     @common.Param() params: TrackWhereUniqueInput
   ): Promise<Track | null> {
     try {
       return await this.service.delete({
-        ...query,
         where: params,
         select: {
           createdAt: true,

@@ -6,10 +6,13 @@ import * as basicAuthGuard from "../../auth/basicAuth.guard";
 import * as abacUtil from "../../auth/abac.util";
 import { isRecordNotFoundError } from "../../prisma.util";
 import * as errors from "../../errors";
+import { Request } from "express";
+import { plainToClass } from "class-transformer";
 import { CompletionService } from "../completion.service";
 import { CompletionCreateInput } from "./CompletionCreateInput";
 import { CompletionWhereInput } from "./CompletionWhereInput";
 import { CompletionWhereUniqueInput } from "./CompletionWhereUniqueInput";
+import { CompletionFindManyArgs } from "./CompletionFindManyArgs";
 import { CompletionUpdateInput } from "./CompletionUpdateInput";
 import { Completion } from "./Completion";
 
@@ -30,7 +33,6 @@ export class CompletionControllerBase {
   @swagger.ApiCreatedResponse({ type: Completion })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async create(
-    @common.Query() query: {},
     @common.Body() data: CompletionCreateInput,
     @nestAccessControl.UserRoles() userRoles: string[]
   ): Promise<Completion> {
@@ -52,9 +54,7 @@ export class CompletionControllerBase {
         `providing the properties: ${properties} on ${"Completion"} creation is forbidden for roles: ${roles}`
       );
     }
-    // @ts-ignore
     return await this.service.create({
-      ...query,
       data: {
         ...data,
 
@@ -101,10 +101,17 @@ export class CompletionControllerBase {
   })
   @swagger.ApiOkResponse({ type: [Completion] })
   @swagger.ApiForbiddenResponse()
+  @swagger.ApiQuery({
+    type: () => CompletionFindManyArgs,
+    style: "deepObject",
+    explode: true,
+  })
   async findMany(
-    @common.Query() query: CompletionWhereInput,
+    @common.Req() request: Request,
     @nestAccessControl.UserRoles() userRoles: string[]
   ): Promise<Completion[]> {
+    const args = plainToClass(CompletionFindManyArgs, request.query);
+
     const permission = this.rolesBuilder.permission({
       role: userRoles,
       action: "read",
@@ -112,7 +119,7 @@ export class CompletionControllerBase {
       resource: "Completion",
     });
     const results = await this.service.findMany({
-      where: query,
+      ...args,
       select: {
         createdAt: true,
         id: true,
@@ -147,7 +154,6 @@ export class CompletionControllerBase {
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async findOne(
-    @common.Query() query: {},
     @common.Param() params: CompletionWhereUniqueInput,
     @nestAccessControl.UserRoles() userRoles: string[]
   ): Promise<Completion | null> {
@@ -158,7 +164,6 @@ export class CompletionControllerBase {
       resource: "Completion",
     });
     const result = await this.service.findOne({
-      ...query,
       where: params,
       select: {
         createdAt: true,
@@ -199,7 +204,6 @@ export class CompletionControllerBase {
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async update(
-    @common.Query() query: {},
     @common.Param() params: CompletionWhereUniqueInput,
     @common.Body()
     data: CompletionUpdateInput,
@@ -224,9 +228,7 @@ export class CompletionControllerBase {
       );
     }
     try {
-      // @ts-ignore
       return await this.service.update({
-        ...query,
         where: params,
         data: {
           ...data,
@@ -284,12 +286,10 @@ export class CompletionControllerBase {
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
   @swagger.ApiForbiddenResponse({ type: errors.ForbiddenException })
   async delete(
-    @common.Query() query: {},
     @common.Param() params: CompletionWhereUniqueInput
   ): Promise<Completion | null> {
     try {
       return await this.service.delete({
-        ...query,
         where: params,
         select: {
           createdAt: true,

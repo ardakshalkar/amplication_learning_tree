@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { UserModule } from "./user/user.module";
-import { ItemModule } from "./item/item.module";
+import { CompetenceModule } from "./competence/competence.module";
 import { CompletionModule } from "./completion/completion.module";
 import { TrackModule } from "./track/track.module";
 import { ACLModule } from "./auth/acl.module";
@@ -15,7 +15,7 @@ import { GraphQLModule } from "@nestjs/graphql";
   controllers: [],
   imports: [
     UserModule,
-    ItemModule,
+    CompetenceModule,
     CompletionModule,
     TrackModule,
     ACLModule,

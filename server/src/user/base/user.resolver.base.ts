@@ -7,15 +7,16 @@ import * as gqlACGuard from "../../auth/gqlAC.guard";
 import * as gqlUserRoles from "../../auth/gqlUserRoles.decorator";
 import * as abacUtil from "../../auth/abac.util";
 import { isRecordNotFoundError } from "../../prisma.util";
+import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import { CreateUserArgs } from "./CreateUserArgs";
 import { UpdateUserArgs } from "./UpdateUserArgs";
 import { DeleteUserArgs } from "./DeleteUserArgs";
-import { FindManyUserArgs } from "./FindManyUserArgs";
-import { FindOneUserArgs } from "./FindOneUserArgs";
+import { UserFindManyArgs } from "./UserFindManyArgs";
+import { UserFindUniqueArgs } from "./UserFindUniqueArgs";
 import { User } from "./User";
-import { FindManyCompletionArgs } from "../../completion/base/FindManyCompletionArgs";
+import { CompletionFindManyArgs } from "../../completion/base/CompletionFindManyArgs";
 import { Completion } from "../../completion/base/Completion";
-import { FindManyTrackArgs } from "../../track/base/FindManyTrackArgs";
+import { TrackFindManyArgs } from "../../track/base/TrackFindManyArgs";
 import { Track } from "../../track/base/Track";
 import { UserService } from "../user.service";
 
@@ -27,6 +28,25 @@ export class UserResolverBase {
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
+  @graphql.Query(() => MetaQueryPayload)
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
+  async _usersMeta(
+    @graphql.Args() args: UserFindManyArgs
+  ): Promise<MetaQueryPayload> {
+    const results = await this.service.count({
+      ...args,
+      skip: undefined,
+      take: undefined,
+    });
+    return {
+      count: results,
+    };
+  }
+
   @graphql.Query(() => [User])
   @nestAccessControl.UseRoles({
     resource: "User",
@@ -34,7 +54,7 @@ export class UserResolverBase {
     possession: "any",
   })
   async users(
-    @graphql.Args() args: FindManyUserArgs,
+    @graphql.Args() args: UserFindManyArgs,
     @gqlUserRoles.UserRoles() userRoles: string[]
   ): Promise<User[]> {
     const permission = this.rolesBuilder.permission({
@@ -54,7 +74,7 @@ export class UserResolverBase {
     possession: "own",
   })
   async user(
-    @graphql.Args() args: FindOneUserArgs,
+    @graphql.Args() args: UserFindUniqueArgs,
     @gqlUserRoles.UserRoles() userRoles: string[]
   ): Promise<User | null> {
     const permission = this.rolesBuilder.permission({
@@ -183,7 +203,7 @@ export class UserResolverBase {
   })
   async completions(
     @graphql.Parent() parent: User,
-    @graphql.Args() args: FindManyCompletionArgs,
+    @graphql.Args() args: CompletionFindManyArgs,
     @gqlUserRoles.UserRoles() userRoles: string[]
   ): Promise<Completion[]> {
     const permission = this.rolesBuilder.permission({
@@ -192,10 +212,12 @@ export class UserResolverBase {
       possession: "any",
       resource: "Completion",
     });
-    const results = await this.service
-      .findOne({ where: { id: parent.id } })
-      // @ts-ignore
-      .completions(args);
+    const results = await this.service.findCompletions(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
     return results.map((result) => permission.filter(result));
   }
 
@@ -207,7 +229,7 @@ export class UserResolverBase {
   })
   async tracks(
     @graphql.Parent() parent: User,
-    @graphql.Args() args: FindManyTrackArgs,
+    @graphql.Args() args: TrackFindManyArgs,
     @gqlUserRoles.UserRoles() userRoles: string[]
   ): Promise<Track[]> {
     const permission = this.rolesBuilder.permission({
@@ -216,10 +238,12 @@ export class UserResolverBase {
       possession: "any",
       resource: "Track",
     });
-    const results = await this.service
-      .findOne({ where: { id: parent.id } })
-      // @ts-ignore
-      .tracks(args);
+    const results = await this.service.findTracks(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
     return results.map((result) => permission.filter(result));
   }
 }

@@ -1,7 +1,7 @@
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsOptional, ValidateNested } from "class-validator";
-import { ItemWhereUniqueInput } from "../../item/base/ItemWhereUniqueInput";
+import { CompetenceWhereUniqueInput } from "../../competence/base/CompetenceWhereUniqueInput";
 import { Type } from "class-transformer";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 @InputType()
@@ -16,17 +16,19 @@ class TrackUpdateInput {
     nullable: true,
   })
   description?: string | null;
+
   @ApiProperty({
     required: false,
-    type: ItemWhereUniqueInput,
+    type: () => CompetenceWhereUniqueInput,
   })
   @ValidateNested()
-  @Type(() => ItemWhereUniqueInput)
+  @Type(() => CompetenceWhereUniqueInput)
   @IsOptional()
-  @Field(() => ItemWhereUniqueInput, {
+  @Field(() => CompetenceWhereUniqueInput, {
     nullable: true,
   })
-  item?: ItemWhereUniqueInput | null;
+  item?: CompetenceWhereUniqueInput | null;
+
   @ApiProperty({
     required: false,
     type: String,
@@ -37,6 +39,7 @@ class TrackUpdateInput {
     nullable: true,
   })
   learningOutcome?: string | null;
+
   @ApiProperty({
     required: false,
     type: String,
@@ -47,9 +50,10 @@ class TrackUpdateInput {
     nullable: true,
   })
   title?: string | null;
+
   @ApiProperty({
     required: false,
-    type: UserWhereUniqueInput,
+    type: () => UserWhereUniqueInput,
   })
   @ValidateNested()
   @Type(() => UserWhereUniqueInput)
