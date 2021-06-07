@@ -2,8 +2,8 @@ import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDate, IsString, IsOptional, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
-import { ItemWhereUniqueInput } from "../../item/base/ItemWhereUniqueInput";
-import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
+import { Competence } from "../../competence/base/Competence";
+import { User } from "../../user/base/User";
 @ObjectType()
 class Track {
   @ApiProperty({
@@ -13,6 +13,7 @@ class Track {
   @Type(() => Date)
   @Field(() => Date)
   createdAt!: Date;
+
   @ApiProperty({
     required: false,
     type: String,
@@ -23,6 +24,7 @@ class Track {
     nullable: true,
   })
   description!: string | null;
+
   @ApiProperty({
     required: true,
     type: String,
@@ -30,14 +32,16 @@ class Track {
   @IsString()
   @Field(() => String)
   id!: string;
+
   @ApiProperty({
     required: false,
-    type: ItemWhereUniqueInput,
+    type: () => Competence,
   })
   @ValidateNested()
-  @Type(() => ItemWhereUniqueInput)
+  @Type(() => Competence)
   @IsOptional()
-  item?: ItemWhereUniqueInput | null;
+  item?: Competence | null;
+
   @ApiProperty({
     required: false,
     type: String,
@@ -48,6 +52,7 @@ class Track {
     nullable: true,
   })
   learningOutcome!: string | null;
+
   @ApiProperty({
     required: false,
     type: String,
@@ -58,6 +63,7 @@ class Track {
     nullable: true,
   })
   title!: string | null;
+
   @ApiProperty({
     required: true,
   })
@@ -65,13 +71,14 @@ class Track {
   @Type(() => Date)
   @Field(() => Date)
   updatedAt!: Date;
+
   @ApiProperty({
     required: false,
-    type: UserWhereUniqueInput,
+    type: () => User,
   })
   @ValidateNested()
-  @Type(() => UserWhereUniqueInput)
+  @Type(() => User)
   @IsOptional()
-  user?: UserWhereUniqueInput | null;
+  user?: User | null;
 }
 export { Track };

@@ -2,8 +2,8 @@ import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDate, IsString, ValidateNested, IsOptional } from "class-validator";
 import { Type } from "class-transformer";
-import { ItemWhereUniqueInput } from "../../item/base/ItemWhereUniqueInput";
-import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
+import { Competence } from "../../competence/base/Competence";
+import { User } from "../../user/base/User";
 @ObjectType()
 class Completion {
   @ApiProperty({
@@ -13,6 +13,7 @@ class Completion {
   @Type(() => Date)
   @Field(() => Date)
   createdAt!: Date;
+
   @ApiProperty({
     required: true,
     type: String,
@@ -20,14 +21,16 @@ class Completion {
   @IsString()
   @Field(() => String)
   id!: string;
+
   @ApiProperty({
     required: false,
-    type: ItemWhereUniqueInput,
+    type: () => Competence,
   })
   @ValidateNested()
-  @Type(() => ItemWhereUniqueInput)
+  @Type(() => Competence)
   @IsOptional()
-  itemId?: ItemWhereUniqueInput | null;
+  itemId?: Competence | null;
+
   @ApiProperty({
     required: true,
   })
@@ -35,13 +38,14 @@ class Completion {
   @Type(() => Date)
   @Field(() => Date)
   updatedAt!: Date;
+
   @ApiProperty({
     required: false,
-    type: UserWhereUniqueInput,
+    type: () => User,
   })
   @ValidateNested()
-  @Type(() => UserWhereUniqueInput)
+  @Type(() => User)
   @IsOptional()
-  userId?: UserWhereUniqueInput | null;
+  userId?: User | null;
 }
 export { Completion };

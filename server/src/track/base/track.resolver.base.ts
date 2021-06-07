@@ -7,13 +7,14 @@ import * as gqlACGuard from "../../auth/gqlAC.guard";
 import * as gqlUserRoles from "../../auth/gqlUserRoles.decorator";
 import * as abacUtil from "../../auth/abac.util";
 import { isRecordNotFoundError } from "../../prisma.util";
+import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import { CreateTrackArgs } from "./CreateTrackArgs";
 import { UpdateTrackArgs } from "./UpdateTrackArgs";
 import { DeleteTrackArgs } from "./DeleteTrackArgs";
-import { FindManyTrackArgs } from "./FindManyTrackArgs";
-import { FindOneTrackArgs } from "./FindOneTrackArgs";
+import { TrackFindManyArgs } from "./TrackFindManyArgs";
+import { TrackFindUniqueArgs } from "./TrackFindUniqueArgs";
 import { Track } from "./Track";
-import { Item } from "../../item/base/Item";
+import { Competence } from "../../competence/base/Competence";
 import { User } from "../../user/base/User";
 import { TrackService } from "../track.service";
 
@@ -25,6 +26,25 @@ export class TrackResolverBase {
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
+  @graphql.Query(() => MetaQueryPayload)
+  @nestAccessControl.UseRoles({
+    resource: "Track",
+    action: "read",
+    possession: "any",
+  })
+  async _tracksMeta(
+    @graphql.Args() args: TrackFindManyArgs
+  ): Promise<MetaQueryPayload> {
+    const results = await this.service.count({
+      ...args,
+      skip: undefined,
+      take: undefined,
+    });
+    return {
+      count: results,
+    };
+  }
+
   @graphql.Query(() => [Track])
   @nestAccessControl.UseRoles({
     resource: "Track",
@@ -32,7 +52,7 @@ export class TrackResolverBase {
     possession: "any",
   })
   async tracks(
-    @graphql.Args() args: FindManyTrackArgs,
+    @graphql.Args() args: TrackFindManyArgs,
     @gqlUserRoles.UserRoles() userRoles: string[]
   ): Promise<Track[]> {
     const permission = this.rolesBuilder.permission({
@@ -52,7 +72,7 @@ export class TrackResolverBase {
     possession: "own",
   })
   async track(
-    @graphql.Args() args: FindOneTrackArgs,
+    @graphql.Args() args: TrackFindUniqueArgs,
     @gqlUserRoles.UserRoles() userRoles: string[]
   ): Promise<Track | null> {
     const permission = this.rolesBuilder.permission({
@@ -203,7 +223,7 @@ export class TrackResolverBase {
     }
   }
 
-  @graphql.ResolveField(() => Item, { nullable: true })
+  @graphql.ResolveField(() => Competence, { nullable: true })
   @nestAccessControl.UseRoles({
     resource: "Track",
     action: "read",
@@ -212,16 +232,14 @@ export class TrackResolverBase {
   async item(
     @graphql.Parent() parent: Track,
     @gqlUserRoles.UserRoles() userRoles: string[]
-  ): Promise<Item | null> {
+  ): Promise<Competence | null> {
     const permission = this.rolesBuilder.permission({
       role: userRoles,
       action: "read",
       possession: "any",
-      resource: "Item",
+      resource: "Competence",
     });
-    const result = await this.service
-      .findOne({ where: { id: parent.id } })
-      .item();
+    const result = await this.service.getItem(parent.id);
 
     if (!result) {
       return null;
@@ -245,9 +263,7 @@ export class TrackResolverBase {
       possession: "any",
       resource: "User",
     });
-    const result = await this.service
-      .findOne({ where: { id: parent.id } })
-      .user();
+    const result = await this.service.getUser(parent.id);
 
     if (!result) {
       return null;

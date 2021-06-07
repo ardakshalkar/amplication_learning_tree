@@ -7,13 +7,14 @@ import * as gqlACGuard from "../../auth/gqlAC.guard";
 import * as gqlUserRoles from "../../auth/gqlUserRoles.decorator";
 import * as abacUtil from "../../auth/abac.util";
 import { isRecordNotFoundError } from "../../prisma.util";
+import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import { CreateCompletionArgs } from "./CreateCompletionArgs";
 import { UpdateCompletionArgs } from "./UpdateCompletionArgs";
 import { DeleteCompletionArgs } from "./DeleteCompletionArgs";
-import { FindManyCompletionArgs } from "./FindManyCompletionArgs";
-import { FindOneCompletionArgs } from "./FindOneCompletionArgs";
+import { CompletionFindManyArgs } from "./CompletionFindManyArgs";
+import { CompletionFindUniqueArgs } from "./CompletionFindUniqueArgs";
 import { Completion } from "./Completion";
-import { Item } from "../../item/base/Item";
+import { Competence } from "../../competence/base/Competence";
 import { User } from "../../user/base/User";
 import { CompletionService } from "../completion.service";
 
@@ -25,6 +26,25 @@ export class CompletionResolverBase {
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
+  @graphql.Query(() => MetaQueryPayload)
+  @nestAccessControl.UseRoles({
+    resource: "Completion",
+    action: "read",
+    possession: "any",
+  })
+  async _completionsMeta(
+    @graphql.Args() args: CompletionFindManyArgs
+  ): Promise<MetaQueryPayload> {
+    const results = await this.service.count({
+      ...args,
+      skip: undefined,
+      take: undefined,
+    });
+    return {
+      count: results,
+    };
+  }
+
   @graphql.Query(() => [Completion])
   @nestAccessControl.UseRoles({
     resource: "Completion",
@@ -32,7 +52,7 @@ export class CompletionResolverBase {
     possession: "any",
   })
   async completions(
-    @graphql.Args() args: FindManyCompletionArgs,
+    @graphql.Args() args: CompletionFindManyArgs,
     @gqlUserRoles.UserRoles() userRoles: string[]
   ): Promise<Completion[]> {
     const permission = this.rolesBuilder.permission({
@@ -52,7 +72,7 @@ export class CompletionResolverBase {
     possession: "own",
   })
   async completion(
-    @graphql.Args() args: FindOneCompletionArgs,
+    @graphql.Args() args: CompletionFindUniqueArgs,
     @gqlUserRoles.UserRoles() userRoles: string[]
   ): Promise<Completion | null> {
     const permission = this.rolesBuilder.permission({
@@ -203,7 +223,7 @@ export class CompletionResolverBase {
     }
   }
 
-  @graphql.ResolveField(() => Item, { nullable: true })
+  @graphql.ResolveField(() => Competence, { nullable: true })
   @nestAccessControl.UseRoles({
     resource: "Completion",
     action: "read",
@@ -212,16 +232,14 @@ export class CompletionResolverBase {
   async itemId(
     @graphql.Parent() parent: Completion,
     @gqlUserRoles.UserRoles() userRoles: string[]
-  ): Promise<Item | null> {
+  ): Promise<Competence | null> {
     const permission = this.rolesBuilder.permission({
       role: userRoles,
       action: "read",
       possession: "any",
-      resource: "Item",
+      resource: "Competence",
     });
-    const result = await this.service
-      .findOne({ where: { id: parent.id } })
-      .itemId();
+    const result = await this.service.getItemId(parent.id);
 
     if (!result) {
       return null;
@@ -245,9 +263,7 @@ export class CompletionResolverBase {
       possession: "any",
       resource: "User",
     });
-    const result = await this.service
-      .findOne({ where: { id: parent.id } })
-      .userId();
+    const result = await this.service.getUserId(parent.id);
 
     if (!result) {
       return null;

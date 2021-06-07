@@ -121,85 +121,85 @@
   },
   {
     "role": "admin",
-    "resource": "Item",
+    "resource": "Competence",
     "action": "read:own",
     "attributes": "*"
   },
   {
     "role": "accessor",
-    "resource": "Item",
+    "resource": "Competence",
     "action": "read:own",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Item",
+    "resource": "Competence",
     "action": "read:own",
     "attributes": "*"
   },
   {
     "role": "creator",
-    "resource": "Item",
+    "resource": "Competence",
     "action": "read:own",
     "attributes": "*"
   },
   {
+    "role": "admin",
+    "resource": "Competence",
+    "action": "create:any",
+    "attributes": "*"
+  },
+  {
     "role": "creator",
-    "resource": "Item",
+    "resource": "Competence",
     "action": "create:any",
     "attributes": "*"
   },
   {
     "role": "admin",
-    "resource": "Item",
-    "action": "create:any",
-    "attributes": "*"
-  },
-  {
-    "role": "admin",
-    "resource": "Item",
+    "resource": "Competence",
     "action": "update:any",
     "attributes": "*"
   },
   {
     "role": "creator",
-    "resource": "Item",
+    "resource": "Competence",
     "action": "update:any",
     "attributes": "*"
   },
   {
     "role": "admin",
-    "resource": "Item",
+    "resource": "Competence",
     "action": "delete:any",
     "attributes": "*"
   },
   {
     "role": "creator",
-    "resource": "Item",
+    "resource": "Competence",
     "action": "delete:any",
     "attributes": "*"
   },
   {
     "role": "admin",
-    "resource": "Item",
+    "resource": "Competence",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "creator",
+    "resource": "Competence",
     "action": "read:any",
     "attributes": "*"
   },
   {
     "role": "accessor",
-    "resource": "Item",
+    "resource": "Competence",
     "action": "read:any",
     "attributes": "*"
   },
   {
     "role": "user",
-    "resource": "Item",
-    "action": "read:any",
-    "attributes": "*"
-  },
-  {
-    "role": "creator",
-    "resource": "Item",
+    "resource": "Competence",
     "action": "read:any",
     "attributes": "*"
   },
